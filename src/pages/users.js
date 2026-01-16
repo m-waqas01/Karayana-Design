@@ -26,66 +26,66 @@ const Users = () => {
       phone: "0332 22525151",
       cnic: "36202-2925920-2",
       target: "14K",
-      role: "Warehouse Manager",
+      role: "Warehouse Managers",
       avatar: "https://i.pravatar.cc/40?img=2",
     },
   ]);
 
-  const [selectedUser, setSelectedUser] = useState(null); // selected user for profile drawer
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  // Save new user
   const handleSaveUser = (newUser) => {
-    // Convert avatar File to object URL if it exists
     const avatarUrl = newUser.avatar
       ? URL.createObjectURL(newUser.avatar)
-      : "https://i.pravatar.cc/40"; // fallback
+      : "https://i.pravatar.cc/40";
 
     const userWithId = {
       ...newUser,
       id: users.length + 1,
       role: activeTab,
-      avatar: avatarUrl, // store URL for table and profile drawer
+      avatar: avatarUrl,
     };
 
     setUsers([...users, userWithId]);
   };
 
-  // Open profile drawer
   const handleUserSelect = (user) => {
     setSelectedUser(user);
   };
 
-  // Close profile drawer
   const handleCloseProfile = () => setSelectedUser(null);
 
-  // Delete user
   const handleDeleteUser = (userId) => {
     const filteredUsers = users.filter((u) => u.id !== userId);
     setUsers(filteredUsers);
 
-    // Close profile drawer if deleted user is open
     if (selectedUser?.id === userId) setSelectedUser(null);
   };
 
   return (
-    <div className="space-y-6">
-      {/* Tabs Row */}
-      <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="space-y-4 sm:space-y-6">
+      {/* Tabs Row - Responsive */}
+      <div className="overflow-x-auto">
+        <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
 
-      {/* Header Row */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{activeTab}</h2>
+      {/* Header Row - Stack on mobile, flex on sm+ */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+          {activeTab}
+        </h2>
 
         {/* Right: Filters */}
-        <UserFilters activeTab={activeTab} onSave={handleSaveUser} />
+        <div className="w-full sm:w-auto">
+          <UserFilters activeTab={activeTab} onSave={handleSaveUser} />
+        </div>
       </div>
 
       {/* Users List */}
       <UsersTable
         activeTab={activeTab}
         users={users}
-        onUserSelect={handleUserSelect} // open profile drawer
-        onDelete={handleDeleteUser} // delete user
+        onUserSelect={handleUserSelect}
+        onDelete={handleDeleteUser}
       />
 
       {/* Profile Drawer */}

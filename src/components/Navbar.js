@@ -1,6 +1,8 @@
 import { HiOutlineBars3 } from "react-icons/hi2";
+import { useSidebar } from "../context/SidebarContext";
 
-const Navbar = ({ onToggleSidebar }) => {
+const Navbar = () => {
+  const { toggle } = useSidebar();
   const today = new Date();
   const days = [
     "Sunday",
@@ -19,16 +21,17 @@ const Navbar = ({ onToggleSidebar }) => {
   });
 
   return (
-    <nav className="h-14 sm:h-16 bg-white shadow-md flex items-center justify-between px-3 sm:px-4 md:px-6">
+    <nav className="h-14 sm:h-16 bg-white shadow-md flex items-center justify-between px-3 sm:px-4 md:px-6 z-50">
       {/* Left Side */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
         {/* Hamburger Button - Mobile Only */}
         <button
-          onClick={onToggleSidebar}
-          className="md:hidden p-2 hover:bg-gray-100 rounded transition-colors"
-          aria-label="Toggle sidebar"
+          onClick={toggle}
+          className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 active:bg-gray-200"
+          aria-label="Toggle navigation menu"
+          type="button"
         >
-          <HiOutlineBars3 size={24} className="text-gray-700" />
+          <HiOutlineBars3 size={28} className="text-gray-700" />
         </button>
 
         {/* Welcome Text - Desktop Only */}

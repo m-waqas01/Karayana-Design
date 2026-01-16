@@ -1,4 +1,4 @@
-import { MoreVertical, Trash } from "lucide-react";
+import { MoreVertical, Trash, Mail, Phone } from "lucide-react";
 import { useState } from "react";
 
 const UserRow = ({ user, onUserSelect, onDelete }) => {
@@ -6,7 +6,7 @@ const UserRow = ({ user, onUserSelect, onDelete }) => {
 
   return (
     <>
-      {/* Desktop Row */}
+      {/* Desktop Row - Hidden on small screens */}
       <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 px-3 sm:px-4 md:px-6 py-3 items-center gap-2 text-xs sm:text-sm border-b hover:bg-gray-50 transition-colors last:border-b-0">
         {/* Name */}
         <div
@@ -23,7 +23,7 @@ const UserRow = ({ user, onUserSelect, onDelete }) => {
               {user.name}
             </p>
             <p className="text-xs text-gray-500 truncate hidden md:block">
-              {user.email}
+              {user.code}
             </p>
           </div>
         </div>
@@ -63,7 +63,7 @@ const UserRow = ({ user, onUserSelect, onDelete }) => {
                   onDelete(user.id);
                   setShowMenu(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-sm transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-sm transition-colors rounded-md"
               >
                 <Trash size={16} /> Delete
               </button>
@@ -72,48 +72,80 @@ const UserRow = ({ user, onUserSelect, onDelete }) => {
         </div>
       </div>
 
-      {/* Mobile Card */}
-      <div className="sm:hidden bg-white p-3 space-y-3 border-b last:border-b-0">
+      {/* Mobile Card - Visible only on small screens (sm:hidden) */}
+      <div className="sm:hidden bg-white p-4 space-y-3 border-b last:border-b-0 rounded-lg">
+        {/* User Header */}
         <div
-          className="flex gap-3 items-start cursor-pointer"
+          className="flex gap-3 items-start cursor-pointer pb-3 border-b"
           onClick={() => onUserSelect(user)}
         >
           <img
             src={user.avatar}
             alt={user.name}
-            className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+            className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-gray-200"
           />
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-gray-800 text-sm truncate">
+            <p className="font-semibold text-gray-800 text-base truncate hover:text-orange-500">
               {user.name}
             </p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
-            <p className="text-xs text-gray-500 mt-1">{user.phone}</p>
+            <p className="text-xs text-orange-500 font-medium mt-1">
+              {user.code}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">{user.role}</p>
           </div>
         </div>
 
-        {user.cnic && (
-          <div className="text-sm">
-            <span className="text-gray-600">CNIC: </span>
-            <span className="font-medium text-gray-800">{user.cnic}</span>
+        {/* User Details Grid */}
+        <div className="space-y-2 text-sm">
+          {/* Email */}
+          <div className="flex items-center gap-2">
+            <Mail size={16} className="text-gray-400 flex-shrink-0" />
+            <span className="text-gray-600 truncate">{user.email}</span>
           </div>
-        )}
 
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-600">Status:</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" defaultChecked className="sr-only peer" />
-            <div className="w-8 h-5 bg-gray-200 rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
-            <div className="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full peer-checked:translate-x-4 transition-transform"></div>
-          </label>
+          {/* Phone */}
+          <div className="flex items-center gap-2">
+            <Phone size={16} className="text-gray-400 flex-shrink-0" />
+            <span className="text-gray-600">{user.phone}</span>
+          </div>
+
+          {/* CNIC */}
+          <div className="flex items-start gap-2">
+            <span className="text-gray-600 font-medium flex-shrink-0 text-xs mt-0.5">
+              CNIC:
+            </span>
+            <span className="text-gray-700 break-all">{user.cnic}</span>
+          </div>
+
+          {/* Target/Code */}
+          {user.target && (
+            <div className="flex items-start gap-2">
+              <span className="text-gray-600 font-medium flex-shrink-0 text-xs">
+                Target:
+              </span>
+              <span className="text-gray-700">{user.target}</span>
+            </div>
+          )}
         </div>
 
-        <div className="flex gap-2 pt-2">
+        {/* Status & Actions */}
+        <div className="space-y-3 pt-3 border-t">
+          {/* Status Toggle */}
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600 text-sm font-medium">Status:</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" defaultChecked className="sr-only peer" />
+              <div className="w-8 h-5 bg-gray-200 rounded-full peer peer-checked:bg-green-500 transition-colors"></div>
+              <div className="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full peer-checked:translate-x-4 transition-transform"></div>
+            </label>
+          </div>
+
+          {/* Delete Button */}
           <button
             onClick={() => onDelete(user.id)}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded transition-colors text-sm"
+            className="flex items-center justify-center gap-2 w-full px-3 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
           >
-            <Trash size={16} /> Delete
+            <Trash size={16} /> Delete User
           </button>
         </div>
       </div>

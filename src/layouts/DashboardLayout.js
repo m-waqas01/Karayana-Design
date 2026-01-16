@@ -1,19 +1,27 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router-dom";
+import { SidebarProvider } from "../context/SidebarContext";
 
 const DashboardLayout = () => {
   return (
-    <div className="flex">
-      <Sidebar />
+    <SidebarProvider>
+      <div className="flex h-screen w-screen overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar />
 
-      <div className="flex-1">
-        <Navbar />
-        <main className="p-6 bg-gray-100 min-h-[calc(100vh-64px)]">
-          <Outlet />
-        </main>
+        {/* Main Content Area */}
+        <div className="flex flex-col flex-1 overflow-hidden w-full">
+          {/* Navbar */}
+          <Navbar />
+
+          {/* Page Content */}
+          <main className="flex-1 overflow-y-auto bg-gray-50 p-3 sm:p-4 md:p-6 lg:p-8">
+            <Outlet />
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
